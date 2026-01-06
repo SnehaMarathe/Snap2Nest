@@ -14,25 +14,39 @@ android {
         applicationId = "com.snehamarathe.snap2nest"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
+
+        // IMPORTANT: must be incremented for every Play upload
+        versionCode = 2
         versionName = "1.0.0"
     }
 
-    // CI/Play signing support.
-    // - In GitHub Actions we decode a base64 keystore into a file and set env vars.
-    // - If env vars are missing, we fall back to debug signing so local builds still work.
-    val keystorePath = System.getenv("SIGNING_KEYSTORE_PATH")
-    val keystoreFile = keystorePath?.let { file(it) } ?: file("upload-keystore.jks")
-    val storePasswordEnv = System.getenv("SIGNING_STORE_PASSWORD")
-    val keyAliasEnv = System.getenv("SIGNING_KEY_ALIAS")
-    val keyPasswordEnv = System.getenv("SIGNING_KEY_PASSWORD")
+    /**
+     * Release signing for CI / Play Store
+     *
+     * GitHub Actions provides:
+     *  - KEYSTORE_PATH        -> path to decoded upload-keystore.jks
+     *  - KEYSTORE_PASSWORD
+     *  - KEY_ALIAS
+     *  - KEY_PASSWORD
+     *
+     * For Play Console, release builds MUST NOT be debug-signed.
+     * If signing env vars are missing, the build should fail rather than falling back to debug.
+     */
+    val keystorePath = System.getenv("KEYSTORE_PATH")
+    val storePasswordEnv = System.getenv("KEYSTORE_PASSWORD")
+    val keyAliasEnv = System.getenv("KEY_ALIAS")
+    val keyPasswordEnv = System.getenv("KEY_PASSWORD")
+
     val hasReleaseSigning =
-        storePasswordEnv != null && keyAliasEnv != null && keyPasswordEnv != null && keystoreFile.exists()
+        !keystorePath.isNullOrBlank() &&
+        !storePasswordEnv.isNullOrBlank() &&
+        !keyAliasEnv.isNullOrBlank() &&
+        !keyPasswordEnv.isNullOrBlank()
 
     signingConfigs {
         create("release") {
             if (hasReleaseSigning) {
-                storeFile = keystoreFile
+                storeFile = file(keystorePath!!)
                 storePassword = storePasswordEnv
                 keyAlias = keyAliasEnv
                 keyPassword = keyPasswordEnv
@@ -44,11 +58,13 @@ android {
         getByName("release") {
             // Keep simple for first Play launch. You can enable minify later.
             isMinifyEnabled = false
-            signingConfig = if (hasReleaseSigning) {
-                signingConfigs.getByName("release")
-            } else {
-                signingConfigs.getByName("debug")
-            }
+
+            // IMPORTANT: Always use release signing config for release builds
+            signingConfig = signingConfigs.getByName("release")
+        }
+
+        getByName("debug") {
+            // keep default debug signing
         }
     }
 
