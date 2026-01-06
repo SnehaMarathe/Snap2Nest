@@ -7,16 +7,16 @@ plugins {
 android {
     // Final app namespace for Play Store. Keep this stable after publishing.
     namespace = "com.snehamarathe.snap2nest"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         // Final applicationId (package name) for Play Store. Keep this stable after publishing.
         applicationId = "com.snehamarathe.snap2nest"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
 
         // IMPORTANT: must be incremented for every Play upload
-        versionCode = 2
+        versionCode = 3
         versionName = "1.0.0"
     }
 
