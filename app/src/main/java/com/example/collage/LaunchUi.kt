@@ -1,4 +1,3 @@
-package com.snehamarathe.snap2nest
 
 import android.Manifest
 import android.app.Activity
@@ -43,9 +42,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.snehamarathe.snap2nest.ui.theme.BrandBlue
-import com.snehamarathe.snap2nest.ui.theme.BrandPink
-import com.snehamarathe.snap2nest.ui.theme.BrandPurple
 import com.yalantis.ucrop.UCrop
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.border
@@ -89,7 +85,6 @@ private fun FollowInstagramBar() {
     Surface(tonalElevation = 1.dp) {
         TextButton(
             onClick = {
-                val uri = Uri.parse("https://instagram.com/Snap2Nest")
                 val i = Intent(Intent.ACTION_VIEW, uri)
                 try { context.startActivity(i) } catch (_: Exception) { }
             },
@@ -98,7 +93,6 @@ private fun FollowInstagramBar() {
                 .padding(vertical = 2.dp)
         ) {
             Text(
-                text = "Follow on Instagram @Snap2Nest",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -545,7 +539,6 @@ Row(
 
             // Small, non-intrusive Snap2Nest branding badge (UI-only; not included in exports)
             Image(
-                painter = painterResource(id = R.drawable.ic_snap2nest_branding),
                 contentDescription = null,
                 modifier = Modifier
                     .size(28.dp)
