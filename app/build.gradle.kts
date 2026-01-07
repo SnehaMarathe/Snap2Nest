@@ -16,8 +16,8 @@ android {
         targetSdk = 35
 
         // IMPORTANT: must be incremented for every Play upload
-        versionCode = 3
-        versionName = "1.0.0"
+        versionCode = 5
+        versionName = "1.0.2"
     }
 
     /**

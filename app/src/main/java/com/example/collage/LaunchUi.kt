@@ -29,6 +29,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -349,13 +350,17 @@ fun LaunchUiRoot(vm: CollageViewModel) {
             }
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 14.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
             ElevatedCard(shape = RoundedCornerShape(18.dp)) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -536,6 +541,17 @@ Row(
             }
                 }
             }
+
+            // Small, non-intrusive Snap2Nest branding badge (UI-only; not included in exports)
+            Image(
+                painter = painterResource(id = R.drawable.ic_snap2nest_branding),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(28.dp)
+                    .align(Alignment.BottomStart)
+                    .padding(start = 12.dp, bottom = 12.dp)
+                    .alpha(0.7f)
+            )
         }
     }
 

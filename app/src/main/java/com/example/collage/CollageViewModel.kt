@@ -101,7 +101,11 @@ val gridOn = mutableStateOf(true)
         recentExports.remove(uri)
         recentExports.add(0, uri)
         // cap
-        while (recentExports.size > 24) recentExports.removeLast()
+        // Avoid Kotlin removeLast()/removeFirst() extension functions.
+        // These can conflict with Java methods introduced in Android 15 and crash on older devices.
+        while (recentExports.size > 24) {
+            recentExports.removeAt(recentExports.lastIndex)
+        }
     }
 
     fun loadRecentExportsFromMediaStore(context: Context, limit: Int = 24) {
