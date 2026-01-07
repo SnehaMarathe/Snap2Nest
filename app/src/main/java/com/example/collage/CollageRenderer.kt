@@ -94,8 +94,11 @@ object CollageRenderer {
             null
         } ?: return
 
-        // Size and placement are relative to output bitmap so it looks consistent across resolutions.
-        val targetW = (widthPx * 0.08f).roundToInt().coerceAtLeast(64)
+        // Requested: a real watermark embedded into the exported image.
+        // Size: ~40dp equivalent OR 10% of the exported image width (whichever is larger).
+        val dm = context.resources.displayMetrics
+        val minWpx = (40f * dm.density).roundToInt().coerceAtLeast(1)
+        val targetW = (widthPx * 0.10f).roundToInt().coerceAtLeast(minWpx)
         val scale = targetW.toFloat() / watermark.width.toFloat()
         val targetH = (watermark.height * scale).roundToInt().coerceAtLeast(1)
 
@@ -105,7 +108,8 @@ object CollageRenderer {
         val dst = Rect(left, top, left + targetW, top + targetH)
 
         val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply {
-            alpha = (255 * 0.70f).roundToInt()
+            // Requested opacity: ~60%
+            alpha = (255 * 0.60f).roundToInt()
         }
 
         canvas.drawBitmap(watermark, null, dst, paint)
