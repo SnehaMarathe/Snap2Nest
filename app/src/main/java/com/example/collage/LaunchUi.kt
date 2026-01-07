@@ -79,9 +79,9 @@ private fun TopBarIconBox(
                 contentDescription = contentDescription,
                 tint = tint
             )
-        }
-    }
-}
+	    	}
+	    }
+	}
 
 @Composable
 private fun FollowInstagramBar() {
@@ -667,4 +667,5 @@ if (showExportSheet) {
         )
     }
 
+}
 }
