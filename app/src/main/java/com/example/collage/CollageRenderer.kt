@@ -80,7 +80,35 @@ object CollageRenderer {
             canvas.restoreToCount(saveCount)
         }
 
+        // --- Snap2Nest watermark (embedded into exported image) ---
+        // Note: This is intentionally subtle and placed in the safe area.
+        drawSnap2NestWatermark(context, canvas, widthPx, heightPx)
+
         return out
+    }
+
+    private fun drawSnap2NestWatermark(context: Context, canvas: Canvas, widthPx: Int, heightPx: Int) {
+        val watermark = try {
+            BitmapFactory.decodeResource(context.resources, R.drawable.ic_snap2nest_branding)
+        } catch (_: Exception) {
+            null
+        } ?: return
+
+        // Size and placement are relative to output bitmap so it looks consistent across resolutions.
+        val targetW = (widthPx * 0.08f).roundToInt().coerceAtLeast(64)
+        val scale = targetW.toFloat() / watermark.width.toFloat()
+        val targetH = (watermark.height * scale).roundToInt().coerceAtLeast(1)
+
+        val margin = (widthPx * 0.02f).roundToInt().coerceAtLeast(16)
+        val left = margin
+        val top = (heightPx - margin - targetH).coerceAtLeast(margin)
+        val dst = Rect(left, top, left + targetW, top + targetH)
+
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.FILTER_BITMAP_FLAG).apply {
+            alpha = (255 * 0.70f).roundToInt()
+        }
+
+        canvas.drawBitmap(watermark, null, dst, paint)
     }
 
     private fun normToRectF(r: RectFNorm, w: Int, h: Int, spacing: Float): RectF {
