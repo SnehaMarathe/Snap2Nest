@@ -541,6 +541,7 @@ Row(
             }
                 }
             }
+        }
 
             // Small, non-intrusive Snap2Nest branding badge (UI-only; not included in exports)
             Image(
@@ -552,9 +553,8 @@ Row(
                     .padding(start = 12.dp, bottom = 12.dp)
                     .alpha(0.7f)
             )
-        }
-    }
 
+    }
     if (showAdjustSheet) {
         ModalBottomSheet(onDismissRequest = { showAdjustSheet = false }) {
             Column(
